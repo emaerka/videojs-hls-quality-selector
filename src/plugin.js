@@ -100,16 +100,6 @@ class HlsQualitySelectorPlugin {
   }
 
   /**
-  *  Edit quality text : change 2160p to 4K
-  *
-  * @param {integer} height - Height of the actual resolution
-  */
-
-  correctQualityText(height) {
-    return height === 2160 ? '4K' : height + 'p';
-  }
-
-  /**
    * Executed when a quality level is added from HLS playlist.
    */
   onAddQualityLevel() {
@@ -124,7 +114,7 @@ class HlsQualitySelectorPlugin {
         return _existingItem.item && _existingItem.item.value === levels[i].height;
       }).length) {
         const levelItem = this.getQualityMenuItem.call(this, {
-          label: this.correctQualityText(levels[i].height),
+          label: levels[i].height + 'p',
           value: levels[i].height
         });
 
@@ -172,8 +162,7 @@ class HlsQualitySelectorPlugin {
     this._currentQuality = height;
 
     if (this.config.displayCurrentQuality) {
-      this.setButtonInnerText(this.correctQualityText(height));
-
+      this.setButtonInnerText(height === 'auto' ? height : `${height}p`);
     }
 
     for (let i = 0; i < qualityList.length; ++i) {
